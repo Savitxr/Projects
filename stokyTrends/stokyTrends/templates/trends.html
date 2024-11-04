@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Include Plotly JS library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        #navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        #navbar .dropdown {
+            display: inline-block;
+        }
+        #navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 160px;
+            z-index: 1;
+            left: 0;
+        }
+        #navbar .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        #navbar .dropdown-content a:hover {
+            background-color: #555;
+        }
+        #navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        #content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
+            padding-left: 20px;
+        }
+        input[type="date"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #131212;
+            color: white;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        #new-graph {
+            margin-top: 20px;
+        }
+        #graph-div {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar">
+        <div class="dropdown">
+            <span>Menu &#9776;</span>
+            <div class="dropdown-content">
+                {% csrf_token %}
+                <!-- Add an ID to the Analysis Site link for easier targeting -->
+                <a href="#" id="prediction-link">Prediction Site</a>
+                <a href="#" id="analysis-link">Analysis Site</a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <h1>{{ symbol }} Chart</h1>
+        
+        <h2>Current Price: {{ current_price}} USD</h2>
+        <!-- Form to input date -->
+    
+        {% if graph_html %}
+        <div id="graph-div">
+            {{ graph_html | safe }}
+        </div>
+        {% endif %}
+
+    </div>
+    <!-- Hidden form to submit symbol for analysis -->
+    <form id="analysis-form" action="{%url 'analysis'%}" method="POST">{% csrf_token %}
+        <input type="hidden" id="symbol-input" name="symbol" value="{{ symbol }}">
+    </form>
+    <form id="prediction-form" action="{%url 'prediction'%}" method="POST">{% csrf_token %}
+        <input type="hidden" id="symbol-input" name="symbol" value="{{ symbol }}">
+    </form>
+    
+    <script>
+        document.getElementById("analysis-link").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("symbol-input").value = "{{ symbol }}";
+            document.getElementById("analysis-form").submit();
+        });
+        document.getElementById("prediction-link").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("symbol-input").value = "{{ symbol }}";
+            document.getElementById("prediction-form").submit();
+        });
+    </script>
+
+</body>
+</html>

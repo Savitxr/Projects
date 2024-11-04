@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ symbol }} Stock Price Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        #prediction_fig {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .prediction-graph {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="prediction_fig">
+    <h1>{{ symbol }} Stock Price Prediction</h1>
+    <div class="prediction-graph">
+        {{ prediction_fig_html | safe }}
+    </div>
+    <h2>Predicted Price: {{ predicted_price | safe }} USD</h2>
+</div>
+
+</body>
+</html>
